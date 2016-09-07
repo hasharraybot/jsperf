@@ -4,7 +4,7 @@
 <ul>
 {% for benchmark in site.benchmarks %}
   <li>
-    <a href="{{ benchmark.url }}">{{ benchmark.title }}</a>
+    <a href="{{ benchmark.url | prepend: site.baseurl }}">{{ benchmark.title }}</a>
   </li>
 {% endfor %}
 </ul>
