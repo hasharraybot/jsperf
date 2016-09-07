@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style type="text/css">
+      {% capture style %}
+        @import "base";
+        @import "syntax";
+        @import "layout";
+      {% endcapture %}
+
+      {{ style | scssify | trim }}
+    </style>
+
+    {% if site.gems contains "jekyll-seo-tag" %}
+      {% seo %}
+    {% endif %}
+  </head>
+
+  <body class="container">
+    {% include masthead.html %}
+
+    <main class="content">
+      {{ content }}
+    </main>
+
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </body>
+</html>

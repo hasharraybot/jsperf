@@ -1,0 +1,93 @@
+---
+layout: default
+---
+
+<article class="benchmark">
+  <h1>{{ page.title }}</h1>
+
+  <section class="benchmark-content">
+    {{ content | replace: '<ul>', '<ul class="test-list">' | replace: '<li>', '<li class="test-item">' }}
+  </section>
+</article>
+
+{% include benchmark.html %}
+<script type="text/javascript">
+  var benchmark =  document.querySelector('.benchmark');
+
+  var button = document.createElement('button');
+  button.innerHTML = 'Run';
+
+  button.onclick = function(event) {
+    event.preventDefault();
+
+    button.disabled = true;
+    button.innerHTML = 'Running...';
+
+    report.innerHTML = '';
+
+    setTimeout(function() {
+      var heading = document.createElement('h2');
+      heading.innerText = 'Results';
+      report.appendChild(heading);
+
+      var items = Array.prototype.slice.call(document.querySelectorAll('.test-item'), 0);
+
+      var tests = items.reduce(function(tests, item) {
+        var heading = item.querySelector('h1, h2, h3, h4, h5, h6');
+        var code = item.querySelector('code');
+
+        tests[heading.innerText] = code.innerText;
+        return tests;
+      }, {});
+
+      var setup = document.querySelector('.benchmark > .language-javascript');
+      if (setup) {
+        eval(setup.innerText);
+      }
+
+      var results = Benchmark.time(1000, tests);
+
+      var min, max;
+      for (var name in results) {
+        if (min == null || min.hz > results[name].hz) {
+          min = results[name];
+        }
+
+        if (max == null || max.hz < results[name].hz) {
+          max = results[name];
+        }
+      }
+
+      for (var name in results) {
+        var item = items.filter(function(item) {
+          return item.querySelector('h1, h2, h3, h4, h5, h6').innerHTML == name;
+        })[0];
+
+        var link = document.createElement('a');
+
+        link.href = '#' + item.id;
+        link.innerHTML = name;
+
+        var term = document.createElement('dt');
+        term.appendChild(link);
+
+        var definition = document.createElement('dd');
+        definition.innerHTML = results[name].hz + ' operations per second';
+
+        var width = Math.round(results[name].hz / max.hz * 100);
+        definition.setAttribute('class', 'result result-' + width);
+
+        report.appendChild(term);
+        report.appendChild(definition);
+      }
+
+      button.disabled = false;
+      button.innerHTML = 'Run Again';
+    }, 100);
+  };
+
+  benchmark.appendChild(button);
+
+  var report = document.createElement('dl');
+  benchmark.appendChild(report);
+</script>

@@ -1,0 +1,47 @@
+<script type="text/javascript">
+
+class Benchmark {
+  static time(duration, tests) {
+    var results = {};
+
+    for (var name in tests) {
+      var period = 0;
+      var operations = 0;
+      var elipsion = 25;
+
+      var iterations = 10;
+      var fn = new Function(tests[name]);
+
+      do {
+        var delta = Benchmark.sample(iterations, fn);
+
+        if (delta < elipsion) {
+          iterations *= 2;
+          continue;
+        }
+
+        operations += iterations;
+        period += delta;
+      } while(period < duration);
+
+      results[name] = {
+        hz: (operations * 1000) / period,
+      };
+    }
+
+    return results;
+  }
+
+  static sample(iterations, fn) {
+    var then = (typeof performance != 'undefined') ? performance.now() : Date.now();
+
+    do {
+      fn();
+    } while(--iterations);
+
+    var now = (typeof performance != 'undefined') ? performance.now() : Date.now();
+
+    return (now - then);
+  }
+}
+</script>

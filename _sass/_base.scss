@@ -1,0 +1,35 @@
+.test-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.test-item {
+  margin-left: 0;
+}
+
+.result {
+  height: 40px;
+  width: 100%;
+  position: relative;
+  margin-left: 0;
+  padding: 10px;
+}
+
+.result:before {
+  background-color: #3d9970;
+  z-index: -1;
+
+  content: "";
+  display: block;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 50%;
+}
+
+@for $i from 1 through 100 {
+  .result-#{$i}:before {
+    width: ($i * 1%);
+  }
+}
