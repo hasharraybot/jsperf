@@ -1,2 +1,10 @@
 ---
 ---
+
+<ul>
+{% for benchmark in site.benchmarks %}
+  <li>
+    <a href="{{ benchmark.url }}">{{ benchmark.title }}</a>
+  </li>
+{% endfor %}
+</ul>
