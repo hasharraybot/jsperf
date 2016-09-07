@@ -1,4 +1,5 @@
 title: JavaScript Performance Benchmark
+baseurl: /jsperf
 
 markdown:    kramdown
 highlighter: rouge
